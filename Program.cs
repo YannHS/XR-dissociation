@@ -1,4 +1,5 @@
 ﻿using StereoKit;
+using OpenCvSharp;
 
 // Initialize StereoKit
 SKSettings settings = new SKSettings

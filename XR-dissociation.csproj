@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="OpenCvSharp4" Version="4.10.0.20241108" />
     <PackageReference Include="StereoKit" Version="0.3.9" />
   </ItemGroup>
   
