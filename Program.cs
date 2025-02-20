@@ -1,5 +1,22 @@
 ﻿using StereoKit;
-using OpenCvSharp;
+using System;
+using System.Threading;
+using SeeShark;
+using SeeShark.FFmpeg;
+using SeeShark.Device;
+
+
+// Create a callback for decoded camera frames
+    void frameEventHandler(object? _sender, FrameEventArgs e)
+    {
+                Frame frame = e.Frame;
+
+        // Get information and raw data from a frame
+        Console.WriteLine($"New frame ({frame.Width}x{frame.Height} | {frame.PixelFormat})");
+        Console.WriteLine($"Length of raw data: {frame.RawData.Length} bytes");
+    }
+
+
 
 // Initialize StereoKit
 SKSettings settings = new SKSettings
@@ -22,6 +39,20 @@ Material floorMaterial  = new Material("floor.hlsl");
 floorMaterial.Transparency = Transparency.Blend;
 
 
+// Create a CameraManager to manage camera devices
+using var manager = new CameraManager();
+
+// Get the first camera available
+using var camera = manager.GetDevice(0);
+
+// Attach your callback to the camera's frame event handler
+camera.OnFrame += frameEventHandler;
+
+// Start decoding frames asynchronously
+camera.StartCapture();
+
+
+
 Tex sky = Tex.FromCubemapEquirectangular("sky.hdr");
 
 
@@ -34,6 +65,15 @@ SK.Run(() =>
 
 	UI.Handle("Cube", ref cubePose, cube.Bounds);
 	cube.Draw(cubePose.ToMatrix());
+	
+
+	
+
+	
+	//sky = Tex.FromColors();
 	Renderer.SkyTex = sky;
+	
+	
+           
 	
 });
